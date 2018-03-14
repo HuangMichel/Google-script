@@ -1,0 +1,76 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+<script>
+    
+  $("#email").on('input', function() {
+
+    var value = $(this).val();
+    var btn = $("#btnSubmit");
+    var icon = $("#icon");
+    var email = $("#email");
+
+    var regrex = /.+@[a-zA-Z]+\.com$/;
+    var color = "";
+    var msg = "";
+    var className = "";
+    var classEmail = "";
+
+    if (!regrex.test(value)) {
+
+      msg = "	Must be user@domain.com";
+      color = "red";
+      className = "far fa-times-circle";
+      classEmail = "form-control is-invalid"
+
+      if (btn.attr("disabled") === false) {
+        btn.attr("disabled", "disabled");
+      }
+
+    } else {
+      msg = "   Valid";
+      color = "green";
+      className = "fas fa-check";
+      classEmail = "form-control is-valid";
+      btn.removeAttr("disabled");
+    }
+
+    if (icon.attr("class") !== className) {
+      icon.removeClass().addClass(className);
+      icon.css("color", color);
+      icon.text(msg);
+      email.removeClass().addClass(classEmail);
+    }
+
+  });
+
+  $("#subject").on("input", function(e) {
+    var className = "";
+    if ($("#subject").val().length > 0) {
+      className = "form-control is-valid";
+    } else {
+      className = "form-control is-invalid";
+    }
+    $("#subject").removeClass().addClass(className);
+  });
+
+  $("#form").submit(function(event) {
+    event.preventDefault();
+    var msg = [];
+    msg.push($("#email").val());
+    msg.push($("#message").val());
+    msg.push($("#subject").val());
+    google.script.run.withSuccessHandler(onSuccessForm).post(msg);
+  });
+
+  function onSuccessForm(e) {
+    $("#contactus").css("display", "none");
+    $("#form").css("display", "none");
+    $("#sentInfo").css("display", "block");
+  }
+  
+</script>
